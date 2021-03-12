@@ -1,0 +1,51 @@
+---
+- name: "Download and extract exporter"
+  ansible.builtin.unarchive:
+    src: "{{ exporter_url }}"
+    dest: "{{ exporters_dest }}"
+    remote_src: yes
+
+- name: "Run extra roles for this exporter"
+  include_role:
+    name: "{{ item }}"
+  loop: "{{ exporter_extra_roles|default([]) }}"
+
+- name: "Create exporter systemd service file"
+  ansible.builtin.copy:
+    dest: "/etc/systemd/system/{{ exporter_name }}.service"
+    content: |
+      [Unit]
+      Description=Exporter {{ exporter_name }}
+      After=network-online.target
+
+      [Service]
+      User=root
+      Restart=on-failure
+      Type=simple
+      {% for key, val in (exporter_commandline_environment|default({})).items() %}
+      Environment="{{ key }}={{ val }}"
+      {% endfor %}
+      ExecStart={{ exporter_commandline }}
+
+      [Install]
+      WantedBy=multi-user.target
+
+- name: "Reload systemd daemon and start the exporter"
+  ansible.builtin.systemd:
+    daemon_reload: yes
+    name: "{{ exporter_name }}"
+    enabled: yes
+    state: started
+
+- name: "Open the port in the firewall"
+  firewalld:
+    offline: no
+    permanent: yes
+    port: "{{ exporter_port }}/tcp"
+    state: enabled
+    zone: public
+
+- name: "Scrape the exporter"
+  include_role:
+    name: add_prometheus_target
+...

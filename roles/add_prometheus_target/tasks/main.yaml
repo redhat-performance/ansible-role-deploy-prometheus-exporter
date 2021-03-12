@@ -1,0 +1,9 @@
+---
+- name: "Add the exporter info in prometheus file"
+  delegate_to: "{{ groups['prometheus'][0] }}"
+  blockinfile:
+    dest: "{{ prometheus_config }}"
+    block: |
+       - targets:
+           - {{ inventory_hostname }}:{{ exporter_port }}
+...
