@@ -41,6 +41,7 @@
   firewalld:
     offline: no
     permanent: yes
+    immediate: yes
     port: "{{ exporter_port }}/tcp"
     state: enabled
     zone: public
