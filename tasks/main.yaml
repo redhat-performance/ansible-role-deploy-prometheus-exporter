@@ -37,6 +37,9 @@
     enabled: yes
     state: started
 
+- name: "Populate service facts"
+  service_facts:
+
 - name: "Open the port in the firewall"
   firewalld:
     offline: no
@@ -45,6 +48,7 @@
     port: "{{ exporter_port }}/tcp"
     state: enabled
     zone: public
+  when: "ansible_facts.services['firewalld.service'] is defined and ansible_facts.services['firewalld.service'].state == 'active'"
 
 - name: "Scrape the exporter"
   include_role:
