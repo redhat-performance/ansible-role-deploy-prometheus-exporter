@@ -41,7 +41,7 @@
   service_facts:
 
 - name: "Open the port in the firewall"
-  firewalld:
+  ansible.posix.firewalld:
     offline: no
     permanent: yes
     immediate: yes
