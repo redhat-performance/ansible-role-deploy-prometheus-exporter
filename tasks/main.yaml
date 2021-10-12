@@ -48,7 +48,7 @@
     port: "{{ exporter_port }}/tcp"
     state: enabled
     zone: public
-  when: "ansible_facts.services['firewalld.service'] is defined and ansible_facts.services['firewalld.service'].state == 'active'"
+  when: "ansible_facts.services['firewalld.service'] is defined and (ansible_facts.services['firewalld.service'].state == 'active' or ansible_facts.services['firewalld.service'].state == 'running')"
 
 - name: "Scrape the exporter"
   include_role:
