@@ -1,9 +1,14 @@
 ---
+- name: "Download the exporter to localhost to then unarchive on targets"
+  ansible.builtin.get_url:
+    src: "{{ exporter_url }}"
+    dest: "/tmp/{{ exporter_name }}.tar.gz"
+  delegate_to: localhost
+
 - name: "Download and extract exporter"
   ansible.builtin.unarchive:
-    src: "{{ exporter_url }}"
+    src: "/tmp/{{ exporter_name }}.tar.gz"
     dest: "{{ exporters_dest }}"
-    remote_src: yes
 
 - name: "Run extra roles for this exporter"
   include_role:
