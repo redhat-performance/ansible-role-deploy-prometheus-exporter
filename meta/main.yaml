@@ -31,3 +31,4 @@ galaxy_info:
 dependencies:
   - name: add_prometheus_target
     src: https://github.com/redhat-performance/ansible-role-add_prometheus_target
+    version: main
