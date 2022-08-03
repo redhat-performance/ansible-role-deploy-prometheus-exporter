@@ -5,6 +5,7 @@
     dest: "/tmp/{{ exporter_name }}.tar.gz"
   delegate_to: localhost
   run_once: true
+  become: false
 
 - name: "Download and extract exporter"
   ansible.builtin.unarchive:
