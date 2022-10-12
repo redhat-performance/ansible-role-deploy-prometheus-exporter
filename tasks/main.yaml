@@ -1,5 +1,5 @@
 ---
-- name: "Download the exporter to localhost to then unarchive on targets"
+- name: "Download the exporter to localhost"
   ansible.builtin.get_url:
     url: "{{ exporter_url }}"
     dest: "/tmp/{{ exporter_name }}.tar.gz"
@@ -9,7 +9,7 @@
   vars:
     ansible_become: false
 
-- name: "Download and extract exporter"
+- name: "Upload and extract exporter to targets"
   ansible.builtin.unarchive:
     src: "/tmp/{{ exporter_name }}.tar.gz"
     dest: "{{ exporters_dest }}"
