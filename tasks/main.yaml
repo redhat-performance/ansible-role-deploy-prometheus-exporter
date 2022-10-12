@@ -6,6 +6,8 @@
   delegate_to: localhost
   run_once: true
   become: false
+  vars:
+    ansible_become: false
 
 - name: "Download and extract exporter"
   ansible.builtin.unarchive:
